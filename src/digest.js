@@ -23,7 +23,7 @@ async function postDigest(client) {
     message += `🔗 **Links shared around the server**\n`;
     for (const link of links) {
       const date = new Date(link.posted_at * 1000).toDateString();
-      message += `• ${link.url} — posted by **${link.author}** in #${link.channel} on ${date}\n`;
+      message += `• <${link.url}> — posted by **${link.author}** in #${link.channel} on ${date}\n`;
     }
     message += `\n`;
   }
@@ -35,9 +35,8 @@ async function postDigest(client) {
       const date = event.start_time
         ? new Date(event.start_time).toDateString()
         : 'Date TBD';
-      message += `• **${event.title}** — ${date}`;
-      if (event.description) message += ` — ${event.description}`;
-      message += `\n`;
+     const eventUrl = `https://discord.com/events/${process.env.GUILD_ID}/${event.event_id}`;
+     message += `• **${event.title}** — ${date} — ${event.description ? event.description + ' — ' : ''}<${eventUrl}>\n`;
     }
   }
 
