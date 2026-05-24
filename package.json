@@ -1,0 +1,14 @@
+{
+  "name": "the-roundup-bot",
+  "version": "1.0.0",
+  "description": "3-day digest bot for the Vancouver ACX Discord server",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^9.4.3",
+    "discord.js": "^14.14.1",
+    "node-cron": "^3.0.3"
+  }
+}
