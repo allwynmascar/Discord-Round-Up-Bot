@@ -84,6 +84,21 @@ function markEventsDigested(ids) {
   `).run(...ids);
 }
 
+function getRecentLinks() {
+  const cutoff = Math.floor(Date.now() / 1000) - (3 * 24 * 60 * 60);
+  return db.prepare(`
+    SELECT * FROM links WHERE posted_at >= ? ORDER BY posted_at ASC
+  `).all(cutoff);
+}
+
+function getRecentEvents() {
+  const cutoff = new Date(Date.now() - (3 * 24 * 60 * 60 * 1000)).toISOString();
+  return db.prepare(`
+    SELECT * FROM events WHERE start_time >= ? OR digested = 0 ORDER BY start_time ASC
+  `).all(cutoff);
+}
+
+
 module.exports = {
   insertLink,
   getPendingLinks,
@@ -91,4 +106,6 @@ module.exports = {
   insertEvent,
   getPendingEvents,
   markEventsDigested,
+  getRecentLinks,
+  getRecentEvents,
 };
