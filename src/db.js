@@ -71,9 +71,10 @@ function insertEvent({ eventId, title, description, startTime, author }) {
 }
 
 function getPendingEvents() {
+  const now = new Date().toISOString();
   return db.prepare(`
-    SELECT * FROM events WHERE digested = 0 ORDER BY start_time ASC
-  `).all();
+    SELECT * FROM events WHERE digested = 0 AND start_time >= ? ORDER BY start_time ASC
+  `).all(now);
 }
 
 function markEventsDigested(ids) {
@@ -91,13 +92,13 @@ function getRecentLinks() {
   `).all(cutoff);
 }
 
-function getRecentEvents() {
-  const cutoff = new Date(Date.now() - (3 * 24 * 60 * 60 * 1000)).toISOString();
-  return db.prepare(`
-    SELECT * FROM events WHERE start_time >= ? OR digested = 0 ORDER BY start_time ASC
-  `).all(cutoff);
-}
 
+function getRecentEvents() {
+  const now = new Date().toISOString();
+  return db.prepare(`
+    SELECT * FROM events WHERE start_time >= ? ORDER BY start_time ASC
+  `).all(now);
+}
 
 module.exports = {
   insertLink,
